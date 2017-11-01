@@ -1,8 +1,8 @@
 version: '3.1'
 
 volumes:
-  postgres_data: {}
-  postgres_backup: {}
+  postgres_data_prod: {}
+  postgres_backup_prod: {}
 
 services:
   # =============================================================
@@ -13,18 +13,19 @@ services:
     container_name: web
     build:
       context: .
-      dockerfile: ./compose/django/Dockerfile
+      dockerfile: ./compose/django/Dockerfile-prod
     depends_on:
       - postgres
+      - redis
     volumes:
       - .:/app
     environment:
       - POSTGRES_USER=dolo_app
       - POSTGRES_HOST=postgres
-      - DJANGO_SETTINGS_MODULE=config.settings.local
+      - DJANGO_SETTINGS_MODULE=config.settings.prod
     ports:
-      - "5000:8000"
-    command: /start.sh
+      - "5000:5000"
+    command: /start-prod.sh
 
   # =============================================================
   # Postgres
@@ -36,11 +37,18 @@ services:
       context: .
       dockerfile: ./compose/postgres/Dockerfile
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - postgres_backup:/backups
+      - postgres_data_prod:/var/lib/postgresql/data
+      - postgres_backup_prod:/backups
     environment:
       - POSTGRES_USER=dolo_app
       - POSTGRES_HOST=postgres
+
+  # =============================================================
+  # Redis
+  # =============================================================
+  redis:
+    image: redis:latest
+    container_name: redis
 
   # =============================================================
   # Nginx
@@ -57,3 +65,6 @@ services:
       - "8000:8000"
     depends_on:
       - dolo
+
+
+

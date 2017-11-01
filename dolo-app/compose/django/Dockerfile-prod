@@ -9,20 +9,21 @@ MAINTAINER Mr.Trinh <loi.trinhxuan@asnet.com.vn>
 
 ENV PYTHONUNBUFFERED 1
 
+RUN groupadd -r django \
+    && useradd -r -g django django
+
 COPY ./requirements /requirements
-RUN pip install -r /requirements/local.txt
+RUN pip install -r /requirements/prod.txt
 
 COPY ./compose/django/entrypoint.sh /entrypoint.sh
 
-RUN sed -i 's/\r//' /entrypoint.sh
+RUN sed -i 's/\r//' /entrypoint.sh && chmod +x /entrypoint.sh && chown django /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
 
-COPY ./compose/django/start.sh /start.sh
+COPY ./compose/django/start-prod.sh /start-prod.sh
 
-RUN sed -i 's/\r//' /start.sh
-
-RUN chmod +x /start.sh
+RUN sed -i 's/\r//' /start-prod.sh && chmod +x /start-prod.sh && chown django /start-prod.sh
 
 WORKDIR /app
 
