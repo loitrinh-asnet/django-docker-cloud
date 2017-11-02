@@ -1,9 +1,26 @@
+sudo: true
+services:
+  - docker
+env:
+  global:
+    - REGISTRY_USER=loitrinh
+    - REGISTRY_PASS=Xu@nloiasnet
 install:
   - sudo apt-get install -y linux-image-virtual kernel linux-image-extra-virtual
   - curl -sSL https://get.docker.com/ | sudo sh
   - sudo pip install docker-compose
+before_script:
+  - docker-compose --version
+  - docker-compose -f docker-compose.prod.yml up
 script:
-  - ls -lah
-  - docker-compose ps
-  email:
-    - loi.trinhxuan@asnet.com.vn
+  - docker-compose
+  - docker run loitrinh/myimage
+after_script:
+  - docker-compose down
+before_deploy:
+  - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
+deploy:
+  provider: script
+  script: docker push loitrinh/myimage
+  on:
+    branch: develop

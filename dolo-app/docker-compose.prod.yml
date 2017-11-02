@@ -8,12 +8,12 @@ services:
   # =============================================================
   # Webapp
   # =============================================================
-  dolo:
+  web:
     image: loitrinh/django:0.1.0
-    container_name: web
+    container_name: web-prod
     build:
       context: .
-      dockerfile: ./compose/django/Dockerfile-prod
+      dockerfile: ./Dockerfile-prod
     depends_on:
       - postgres
       - redis
@@ -32,10 +32,8 @@ services:
   # =============================================================
   postgres:
     image: loitrinh/postgres:0.1.0
-    container_name: database
-    build:
-      context: .
-      dockerfile: ./compose/postgres/Dockerfile
+    container_name: postgres-prod
+    build: ./../compose/postgres/
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data
       - postgres_backup_prod:/backups
@@ -48,23 +46,21 @@ services:
   # =============================================================
   redis:
     image: redis:latest
-    container_name: redis
+    container_name: redis-prod
 
   # =============================================================
   # Nginx
   # =============================================================
   nginx:
     image: loitrinh/nginx:0.1.0
-    container_name: nginx
-    build:
-      context: .
-      dockerfile: ./compose/nginx/Dockerfile
+    container_name: nginx-prod
+    build: ./../compose/nginx/
     volumes:
       - .:/app
     ports:
       - "8000:8000"
     depends_on:
-      - dolo
+      - web
 
 
 

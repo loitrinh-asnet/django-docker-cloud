@@ -10,19 +10,16 @@ MAINTAINER Mr.Trinh <loi.trinhxuan@asnet.com.vn>
 ENV PYTHONUNBUFFERED 1
 
 COPY ./requirements /requirements
+
 RUN pip install -r /requirements/local.txt
 
-COPY ./compose/django/entrypoint.sh /entrypoint.sh
+COPY ./shell-scripts/entrypoint.sh /entrypoint.sh
 
-RUN sed -i 's/\r//' /entrypoint.sh
+RUN sed -i 's/\r//' /entrypoint.sh && chmod +x /entrypoint.sh
 
-RUN chmod +x /entrypoint.sh
+COPY ./shell-scripts/start.sh /start.sh
 
-COPY ./compose/django/start.sh /start.sh
-
-RUN sed -i 's/\r//' /start.sh
-
-RUN chmod +x /start.sh
+RUN sed -i 's/\r//' /start.sh && chmod +x /start.sh
 
 WORKDIR /app
 

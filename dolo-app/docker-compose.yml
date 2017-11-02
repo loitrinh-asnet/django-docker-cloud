@@ -8,12 +8,12 @@ services:
   # =============================================================
   # Webapp
   # =============================================================
-  dolo:
+  web:
     image: loitrinh/django:0.1.0
-    container_name: web
+    container_name: web-dev
     build:
       context: .
-      dockerfile: ./compose/django/Dockerfile
+      dockerfile: ./Dockerfile
     depends_on:
       - postgres
     volumes:
@@ -31,29 +31,11 @@ services:
   # =============================================================
   postgres:
     image: loitrinh/postgres:0.1.0
-    container_name: database
-    build:
-      context: .
-      dockerfile: ./compose/postgres/Dockerfile
+    container_name: postgres-dev
+    build: ./../compose/postgres/
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - postgres_backup:/backups
     environment:
       - POSTGRES_USER=dolo_app
       - POSTGRES_HOST=postgres
-
-  # =============================================================
-  # Nginx
-  # =============================================================
-  nginx:
-    image: loitrinh/nginx:0.1.0
-    container_name: nginx
-    build:
-      context: .
-      dockerfile: ./compose/nginx/Dockerfile
-    volumes:
-      - .:/app
-    ports:
-      - "8000:8000"
-    depends_on:
-      - dolo

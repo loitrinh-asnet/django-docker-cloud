@@ -9,14 +9,14 @@ FROM postgres:9.6
 MAINTAINER Mr.Trinh <loi.trinhxuan@asnet.com.vn>
 
 # Copy backup database script
-COPY ./compose/postgres/scripts/backup.sh /usr/local/bin/backup
+COPY ./scripts/backup.sh /usr/local/bin/backup
 RUN chmod +x /usr/local/bin/backup
 
 # Copy restore database script
-COPY ./compose/postgres/scripts/restore.sh /usr/local/bin/restore
+COPY ./scripts/restore.sh /usr/local/bin/restore
 RUN chmod +x /usr/local/bin/restore
 
 # Copy the list of backups script
-COPY ./compose/postgres/scripts/list-backups.sh /usr/local/bin/list-backups
+COPY ./scripts/list-backups.sh /usr/local/bin/list-backups
 RUN chmod +x /usr/local/bin/list-backups
 
