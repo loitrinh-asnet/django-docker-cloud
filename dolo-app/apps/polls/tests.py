@@ -1,0 +1,22 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+# Import from standard library
+import datetime
+
+# Import from django
+from django.utils import timezone
+from django.test import TestCase
+
+# Import from local app
+from .models import Question
+
+
+class QuestionModelTests(TestCase):
+    """QuestionModelTests."""
+
+    def test_was_published_recently_with_future_question(self):
+        """was_published_recently() returns False for questions whose pub_date is in the future."""
+        time = timezone.now() + datetime.timedelta(days=30)
+        future_question = Question(pub_date=time)
+        self.assertIs(future_question.count(), 1)

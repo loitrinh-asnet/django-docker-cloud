@@ -42,9 +42,12 @@ DJANGO_APPS = [
     'django.contrib.admin',
 ]
 
+MAIN_APPS = [
+    'apps.polls',
+]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
-INSTALLED_APPS = DJANGO_APPS
+INSTALLED_APPS = DJANGO_APPS + MAIN_APPS
 
 # MIDDLEWARE CONFIGURATION
 # ------------------------------------------------------------------------------
