@@ -1,0 +1,35 @@
+version: '3.1'
+
+volumes:
+  postgres_data: {}
+  postgres_backup: {}
+
+services:
+  # =============================================================
+  # Postgres
+  # =============================================================
+  postgres:
+    image: loitrinh/postgres:0.1.0
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_backup:/backups
+    environment:
+      - POSTGRES_USER=dolo_app
+      - POSTGRES_HOST=postgres
+
+  # =============================================================
+  # Testing
+  # =============================================================
+  sut:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+    environment:
+      - POSTGRES_USER=dolo_app
+      - POSTGRES_HOST=postgres
+      - DJANGO_SETTINGS_MODULE=config.settings.local
+    command: python /app/manage.py test
