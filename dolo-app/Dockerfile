@@ -23,4 +23,6 @@ RUN sed -i 's/\r//' /start.sh && chmod +x /start.sh
 
 WORKDIR /app
 
+ADD . /app/
+
 ENTRYPOINT ["/entrypoint.sh"]
